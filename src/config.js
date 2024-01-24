@@ -1,0 +1,1 @@
+//archivo de configuraciones globales
