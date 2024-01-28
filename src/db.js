@@ -1,11 +1,14 @@
-//config de base de datos 
-
+// Cambia el nombre del archivo a db.mjs (o db.cjs si prefieres)
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 export const connectDB = async () => {
+    const link = process.env.MONGODB_LINK;
+
     try {
-        await mongoose.connect("mongodb+srv://root:admin123@mern-stack.7wrii3j.mongodb.net/?retryWrites=true&w=majority");
+        await mongoose.connect(link);
 
         console.log(">>> DB is connected");
     } catch (error) {
