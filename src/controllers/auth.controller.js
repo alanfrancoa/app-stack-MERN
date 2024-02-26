@@ -9,8 +9,8 @@ export const register = async (req, res) => {
             email,
             password
         })
-        await newUser.save()
-        res.send('registrando')
+        const userSaved = await newUser.save()
+        res.json(userSaved)
     } catch (error) {
         console.log(error)
     }
