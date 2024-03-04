@@ -17,11 +17,11 @@ export const register = async (req, res) => {
         const token = await createAccessToken({ id: userFound._id })
         res.cookie('token', token)
         res.json({
-            id: userSaved._id,
-            username: userSaved.username,
-            email: userSaved.email,
-            createdAt: userSaved.createdAt,
-            updatedAt: userSaved.updatedAt,
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email,
+            createdAt: userFound.createdAt,
+            updatedAt: userFound.updatedAt,
         })
     } catch (error) {
         res.status(500).json({ message: error.message })
