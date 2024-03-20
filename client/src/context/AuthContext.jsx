@@ -1,11 +1,11 @@
-import { createContext, useState, useContext } from "react"
-import { registerRequest } from '../api/auth'
+import { createContext, useState, useContext, useEffect } from "react"
+import { registerRequest, loginRequest } from '../api/auth'
 
 export const AuthContext = createContext()
 export const useAuth = () => {
     const context = useContext(AuthContext)
-    if (!context){
-        throw new Error ("useAuth must be used within an AuthProvider")
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider")
     }
     return context
 }
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     const [errors, setErrors] = useState([])
 
     const signup = async (user) => {
-        try{
+        try {
             const res = await registerRequest(user);
             console.log(res.data)
             setUser(res.data)
@@ -27,9 +27,33 @@ export const AuthProvider = ({ children }) => {
             setErrors(error.response.data)
         }
     }
+
+    const signin = async (user) => {
+        try {
+            const res = await loginRequest(user)
+            console.log(res)
+        }
+        catch (error) {
+            if (Array.isArray(error.response.data)){
+                return setErrors(error.response.data)
+            }
+            setErrors([error.response.data.message])
+        } // si es un array, establecemos el array de errores tal cual, en caso que no sea, porque la respuesta generada en el backend no lo es, asigna el error dentro del array.
+    }
+
+    useEffect(() => {
+        if (errors.length > 0) {
+            const timer = setTimeout(() => {
+                setErrors([])
+            }, 5000)
+            return () => clearTimeout(timer)
+        }
+    }, [errors]) //luego de 5 segundos elimina los errores del array. El caso de que el usuario navegue a otro sitio limpia el timeout
+
     return (
         <AuthContext.Provider value={{
             signup,
+            signin,
             user,
             isAuthenticated,
             errors,

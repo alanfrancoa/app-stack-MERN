@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../context/AuthContext.jsx'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const RegisterPage = () => {
     const {
@@ -60,6 +60,9 @@ const RegisterPage = () => {
                 }
                 <button type='submit'>Register</button>
             </form>
+            <p className='flex gap-x-2 justify-between'>
+                Already have an account? <Link to="/login" className='text-sky-500'>Login</Link>
+            </p>
         </div>
     )
 }
