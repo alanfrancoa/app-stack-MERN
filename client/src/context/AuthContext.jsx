@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react"
-import { registerRequest, loginRequest } from '../api/auth'
+import { registerRequest, loginRequest, verifyTokenRequest } from '../api/auth.js'
+import Cookies from 'js-cookie'
 
 export const AuthContext = createContext()
 export const useAuth = () => {
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const signup = async (user) => {
         try {
@@ -32,9 +34,11 @@ export const AuthProvider = ({ children }) => {
         try {
             const res = await loginRequest(user)
             console.log(res)
+            setIsAuthenticated(true)
+            setUser(res.data)
         }
         catch (error) {
-            if (Array.isArray(error.response.data)){
+            if (Array.isArray(error.response.data)) {
                 return setErrors(error.response.data)
             }
             setErrors([error.response.data.message])
@@ -50,6 +54,38 @@ export const AuthProvider = ({ children }) => {
         }
     }, [errors]) //luego de 5 segundos elimina los errores del array. El caso de que el usuario navegue a otro sitio limpia el timeout
 
+
+    useEffect(() => {
+        async function checkLogin() {
+            const cookies = Cookies.get()
+
+            if (!cookies.token) {
+                setIsAuthenticated(false)
+                setLoading(false)
+                return setUser(null)
+            } //primero comprueba si no hay token, en ese caso, establece que no hay autenticacion, ni carga, ni usuario.
+            try {
+                const res = await verifyTokenRequest(cookies.token)
+                console.log(res)
+                if (!res.data) {
+                    setIsAuthenticated(false)
+                    setLoading(false)
+                    return
+                } //si hay un token, lo envia al back, este va a responder, si no envia ningun dato, no autenticacion ni carga.
+                setIsAuthenticated(true)
+                setUser(res.data)
+                setLoading(false)
+            } //si devuelve dato correcto, establece la autenticacion, el usuario y finaliza carga. 
+            catch (error) {
+                setIsAuthenticated(false)
+                setUser(null)
+                setLoading(false)
+            } //si hay error, autenticado en false, sin usuario ni carga. 
+        }
+
+        checkLogin()
+    }, [])
+
     return (
         <AuthContext.Provider value={{
             signup,
@@ -57,6 +93,7 @@ export const AuthProvider = ({ children }) => {
             user,
             isAuthenticated,
             errors,
+            loading,
         }}>
             {children}
         </AuthContext.Provider>
