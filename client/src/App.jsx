@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import NavBar from './components/NavBar.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { TaskProvider } from './context/TaskContext.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -15,6 +16,7 @@ const App = () => {
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
+          <NavBar />
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/login' element={<LoginPage />} />

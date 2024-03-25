@@ -45,6 +45,12 @@ export const AuthProvider = ({ children }) => {
         } // si es un array, establecemos el array de errores tal cual, en caso que no sea, porque la respuesta generada en el backend no lo es, asigna el error dentro del array.
     }
 
+    const logout = () => {
+        Cookies.remove('token')
+        setIsAuthenticated(false)
+        setUser(null)
+    }
+
     useEffect(() => {
         if (errors.length > 0) {
             const timer = setTimeout(() => {
@@ -53,7 +59,6 @@ export const AuthProvider = ({ children }) => {
             return () => clearTimeout(timer)
         }
     }, [errors]) //luego de 5 segundos elimina los errores del array. El caso de que el usuario navegue a otro sitio limpia el timeout
-
 
     useEffect(() => {
         async function checkLogin() {
@@ -94,6 +99,7 @@ export const AuthProvider = ({ children }) => {
             isAuthenticated,
             errors,
             loading,
+            logout
         }}>
             {children}
         </AuthContext.Provider>
