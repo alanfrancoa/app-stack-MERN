@@ -32,7 +32,7 @@ const LoginPage = () => {
           </div>
         ))}
 
-        <h1 className='text-2xl font-bold'>Login</h1>
+        <h1 className='text-2xl font-bold my-2'>Login</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input type="email"{...register('email', { required: true })}
             className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
@@ -52,7 +52,7 @@ const LoginPage = () => {
               <p className='text-red-500'>Password is required</p>
             )
           }
-          <button type='submit'>Login</button>
+          <button type='submit' className = 'bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md'>Login</button>
         </form>
         <p className='flex gap-x-2 justify-between'>
           Don't have an account? <Link to="/register" className='text-sky-500'>Sign up</Link>
