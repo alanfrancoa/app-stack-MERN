@@ -9,7 +9,7 @@ dayjs.extend(utc)
 
 const TaskFormPage = () => {
   const { register, handleSubmit, setValue } = useForm()
-  const { tasks, createTask, getTask, updateTask } = useTasks()
+  const { createTask, getTask, updateTask } = useTasks()
   const navigate = useNavigate()
   const params = useParams()
 

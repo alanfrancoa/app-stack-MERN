@@ -28,7 +28,7 @@ const NavBar = () => {
                     <>
                         <li>
                             <Link to='/login'
-                                className='bg-indigo-500 px-4 py-1 rounded-sm'>Login</Link>
+                                className='bg-indigo-500 px-4 py-1 rounded-sm'>Log In</Link>
                         </li>
                         <li>
                             <Link to='/register'
